@@ -15,11 +15,11 @@
 Yii::import('comments.widgets.ECommentsBaseWidget');
 class ECommentsFormWidget extends ECommentsBaseWidget
 {       
-        /**
-         * Is used for display validation errors
-         * @var Comment newComment 
-         */
-        public $validatedComment;
+    /**
+    * Is used for display validation errors
+    * @var Comment newComment 
+    */
+    public $validatedComment;
         
 	public function run()
 	{

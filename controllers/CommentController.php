@@ -109,43 +109,35 @@ class CommentController extends Controller
 		));
 	}
         
-        public function actionPostComment()
-        {
-            if(isset($_POST['Comment']) && Yii::app()->request->isAjaxRequest)
-            {
-                $comment = new Comment();
-                $comment->attributes = $_POST['Comment'];
-                $result = array();
-                if($comment->save())
-                {
-                    $result['code'] = 'success';
-                    $this->beginClip("list");
-                        $this->widget('comments.widgets.ECommentsListWidget', array(
-                            'model' => $comment->ownerModel,
-                            'showPopupForm' => false,
-                        ));
-                    $this->endClip();
-                    $this->beginClip('form');
-                        $this->widget('comments.widgets.ECommentsFormWidget', array(
-                            'model' => $comment->ownerModel,
-                        ));
-                    $this->endClip();
-                    $result['list'] = $this->clips['list'];
-                }
-                else 
-                {
-                    $result['code'] = 'fail';
-                    $this->beginClip('form');
-                        $this->widget('comments.widgets.ECommentsFormWidget', array(
-                            'model' => $comment->ownerModel,
-                            'validatedComment' => $comment,
-                        ));
-                    $this->endClip();
-                }
-                $result['form'] = $this->clips['form'];
-                echo CJSON::encode($result);
+    public function actionPostComment($id=null)
+    {
+        $comment = new Comment();
+        if($id != null){
+            $comment = $this->loadModel($id);        
+        }else if(isset($_POST['Comment']) && isset($_POST['Comment']['comment_id'])){
+            $comment = $this->loadModel($_POST['Comment']['comment_id']);
+        }
+        $result = array();
+        if(isset($_POST['Comment']) )//&& Yii::app()->request->isAjaxRequest)
+        {    
+            $comment->attributes = $_POST['Comment'];
+            if($comment->save()){
+                $result['code'] = 'success';
+            }else{
+                $result['code'] = 'fail';
             }
         }
+        $this->beginClip('form');
+            $this->widget('comments.widgets.ECommentsFormWidget', array(
+                'model' => $comment->ownerModel,
+                'validatedComment' => isset($result['code']) && $result['code'] == 'success' ? false : $comment,
+            ));
+        $this->endClip();
+        $result['form'] = $this->clips['form'];
+        echo CJSON::encode($result);
+    }
+    
+    
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

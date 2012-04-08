@@ -172,11 +172,11 @@ class Comment extends CActiveRecord {
             $criteria->with = 'user';
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                    'pagination'=>array(
-                        'pageSize'=>30,
-                    ),
-                ));
+            'criteria' => $criteria,
+            'pagination'=>array(
+                'pageSize'=>30,
+            ),
+        ));
     }
     
     /**
@@ -256,6 +256,30 @@ class Comment extends CActiveRecord {
             $criteria->with = 'user';
         $comments = self::model()->findAll($criteria);
         return $this->buildTree($comments);
+    }
+    
+    public function getComments() {
+        $criteria = new CDbCriteria;
+        $criteria->compare('owner_name', $this->owner_name);
+        $criteria->compare('owner_id', $this->owner_id);
+        $criteria->compare('t.status', '<>'.self::STATUS_DELETED);
+        $criteria->order = 't.parent_comment_id, t.create_time ';
+        if($this->config['orderComments'] === 'ASC' || $this->config['orderComments'] === 'DESC')
+            $criteria->order .= $this->config['orderComments'];
+        //if premoderation is seted and current user isn't superuser
+        if($this->config['premoderate'] === true && $this->evaluateExpression($this->config['isSuperuser']) === false)
+            $criteria->compare('t.status', self::STATUS_APPROVED);
+        $relations = $this->relations();
+        //if User model has been configured
+        if(isset($relations['user']))
+            $criteria->with = 'user';
+        
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination'=>array(
+                'pageSize'=>10,
+            ),
+        ));
     }
 
     public function beforeValidate() {

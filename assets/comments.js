@@ -16,6 +16,7 @@
             var settings = $.extend({}, $.fn.commentsList.defaults, options || {});
             var $this = $(this);
             var id = $this.attr('id');
+            console.log('wi id: ', id, $this);
             $.fn.commentsList.settings[id] = settings;
             $.fn.commentsList.initDialog(id);
             $this
@@ -28,57 +29,55 @@
                         data = $.parseJSON(data);
                         if(data["code"] === "success")
                         {
-                            $("#comment-"+data["deletedID"]).remove();
+                            $.fn.yiiListView.update('CommentsList-'+id);
                         }
                     });
                 }
                 return false;
             })
-            .delegate('.approve', 'click', function(){
-                var id = $($(this).parents('.comment-widget')[0]).attr("id");
-                if(confirm($.fn.commentsList.settings[id]['deleteConfirmString']))
-                {
-                    $.post($(this).attr('href'))
-                    .success(function(data){
-                        data = $.parseJSON(data);
-                        if(data["code"] === "success")
-                        {
-                            $("#comment-"+data["approvedID"]+" > .admin-panel > .approve").remove();
-                        }
-                    });
-                }
-                return false;
-            })
-            .delegate('.add-comment', 'click', function(){
+            
+            .delegate('.edit-comment', 'click', function(){
                 var id = $($(this).parents('.comment-widget')[0]).attr("id");
                 $dialog = $("#addCommentDialog-"+id);
-                var commentID = $(this).attr('rel');
-                if(commentID)
-                    $('.parent_comment_id', $dialog).val(commentID);
-                $dialog.dialog("open");
+                
+                $.post($(this).attr('href'))
+                .success(function(data){
+                    data = $.parseJSON(data);
+                    $dialog.html(data["form"]);
+                    $($dialog).modal('show');               
+                });
+                
+                return false;
+            })
+            .delegate('.post-comment', 'click', function(){
+                var id = $($(this).parents('.comment-widget')[0]).attr("id");
+                $dialog = $("#addCommentDialog-"+id);
+                
+                console.log($dialog);
+                $.fn.commentsList.postComment($dialog);
                 return false;
             });
         });
     };
         
     $.fn.commentsList.defaults = {
-        dialogTitle: 'Add comment',
         deleteConfirmString: 'Delete this comment?',
-        approveConfirmString: 'Approve this comment?',
-        postButton: 'Add comment',
-        cancelButton: 'Cancel'
+        approveConfirmString: 'Approve this comment?'
     };
         
     $.fn.commentsList.settings = {};
         
     $.fn.commentsList.initDialog = function(id){
         var $dialog = $('#addCommentDialog-'+id);
-	$dialog.find('form').submit(function(){
-		$.fn.commentsList.postComment($dialog);
-		return false;
-	});
+        
+        $dialog.find('form').submit(function(){
+            $.fn.commentsList.postComment($dialog);
+            return false;
+        });
+            
         $dialog.data('widgetID', id);
-        $dialog.dialog({
+        //$dialog.modal();
+        /*$dialog.dialog({
             'title':$.fn.commentsList.settings[id]['dialogTitle'],
             'autoOpen':false,
             'width':'auto',
@@ -100,22 +99,24 @@
                     }
                 }
             ]
-        });
+        });*/
     }
         
     $.fn.commentsList.postComment = function($dialog){
         var $form = $("form", $dialog);
+        console.log($form);
         $.post(
             $form.attr("action"),
             $form.serialize()
-            ).success(function(data){
+        ).success(function(data){
             data = $.parseJSON(data);
+            console.log(data);
             $dialog.html(data["form"]);
             if(data["code"] == "success")
             {
+                $($dialog).modal('hide');
                 var id = $dialog.data('widgetID');
-                $('#'+id).html($(data["list"]).html());
-                $dialog.dialog("close");
+                $.fn.yiiListView.update('CommentsList-'+id);
             }
         });
     }
