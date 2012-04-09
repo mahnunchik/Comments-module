@@ -4,35 +4,63 @@
     Author     : segoddnja@gmail.com
 */
 
-root { 
-    display: block;
-}
-
 .comments-list{
-    list-style-type: none;
-    padding-left: 0;
+    
 }
 
-.comments-list .admin-panel{
-    border: solid 1px grey;
-    padding: 5px;
+.comments-list .comment{
+    min-height: 40px;
+    padding-left: 19px;
+    padding-right: 19px;
+    padding-top: 7px;
+    padding-bottom: 2px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
-.comments-list .comments-list{
-    padding-left: 20px;
-}
-
-.comments-list li{
-    margin: 5px 0;
-    background: #E5F1F4;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.comments-list li:nth-child(2n){
+.comments-list .comment:nth-child(2n){
     background: #F8F8F8;
 }
 
-.comments-list li .comment-header{
-    font-weight: bold;
+.comments-list .comment-header{
 }
+
+.comments-list .admin-panel{
+    text-align: right;
+}
+
+.comments-list .name-panel{
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.comments-list .comment-body{
+    min-height: 20px;
+    
+}
+
+.comments-list .photo-panel{
+    max-height: 400px;
+    overflow: hidden;
+}
+.comments-list .text-panel{
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.comments-list hr{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+
+

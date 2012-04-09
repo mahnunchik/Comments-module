@@ -5,6 +5,8 @@
         'id'=>'CommentsList-'.$this->id,
         'dataProvider'=>$comments,
         'itemView'=>'ECommentsWidgetComments',
+        'htmlOptions'=>array('class'=>'comments-list'),
+        'cssFile'=>null,
     )); 
     
     if($this->registeredOnly === false || Yii::app()->user->isGuest === false)
@@ -13,10 +15,10 @@
             'id'=>'addCommentDialog-' . $this->id,
             'htmlOptions'=>array('class'=>'hide'),
             'events'=>array(
-                'show'=>"js:function() { console.log('modal show.'); }",
-                'shown'=>"js:function() { console.log('modal shown.'); }",
-                'hide'=>"js:function() { console.log('modal hide.'); }",
-                'hidden'=>"js:function() { console.log('modal hidden.'); }",
+                'show'=>"js:function() { }",
+                'shown'=>"js:function() { }",
+                'hide'=>"js:function() { }",
+                'hidden'=>"js:function() { }",
             ),
         )); ?>
 

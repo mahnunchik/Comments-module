@@ -1,32 +1,40 @@
 <?php $comment = $data; ?>
-    <li id="comment-<?php echo $comment->comment_id; ?>">
-        <div class="comment-header">
-            <?php echo $comment->userName;?>
-            <?php echo Yii::app()->dateFormatter->formatDateTime($comment->create_time);?>
+<div id="comment-<?php echo $comment->comment_id; ?>" class="comment">
+    <div class="row comment-header">
+        <div class="span2 name-panel">
+            <?php echo CHtml::link($comment->userName, array("/profile/view","id"=>$comment->creator_id)) ?>
         </div>
-        <?php if($this->adminMode === true):?>
-            <div class="admin-panel">
-                <?php if($comment->status === null || $comment->status == Comment::STATUS_NOT_APPROVED) echo CHtml::link(Yii::t('CommentsModule.msg', 'approve'), Yii::app()->urlManager->createUrl(
-                    CommentsModule::APPROVE_ACTION_ROUTE, array('id'=>$comment->comment_id)
-                ), array('class'=>'approve'));?>
-                <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'delete'), Yii::app()->urlManager->createUrl(
-                    CommentsModule::DELETE_ACTION_ROUTE, array('id'=>$comment->comment_id)
-                ), array('class'=>'delete'));?>
-                <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'edit'), Yii::app()->urlManager->createUrl(
-                    $this->postCommentAction, array('id'=>$comment->comment_id)
-                ), array('class'=>'edit-comment'));?>
-            </div>
-        <?php endif; ?>
-        <div>
+        <div class="span6 admin-panel">
+            <?php echo Yii::t('CommentsModule.msg', 'Created:'); ?>
+            <?php echo Yii::app()->dateFormatter->formatDateTime($comment->create_time);?>
+            <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'delete'), Yii::app()->urlManager->createUrl(
+                CommentsModule::DELETE_ACTION_ROUTE, array('id'=>$comment->comment_id)
+            ), array('class'=>'delete btn btn-mini btn-danger'));?>
+            <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'edit'), Yii::app()->urlManager->createUrl(
+                $this->postCommentAction, array('id'=>$comment->comment_id)
+            ), array('class'=>'edit-comment btn btn-mini btn-success'));?>
+        </div>
+    </div>
+    <hr>
+    
+    <div class="row comment-body">
+        <div class="span2 photo-panel">         
+            <ul class="thumbnails">
+                <li class="span2">
+                    <?php 
+                        $thumbnail_id = $comment->user->profile->thumbnail_id ? $comment->user->profile->thumbnail_id : 1;
+                        echo CHtml::link(CHtml::image(Yii::app()->image->getURL($thumbnail_id,"span2")) ,
+                            array("/profile/view","id"=>$comment->creator_id), array('class'=>'thumbnail')
+                        );
+                    ?> 
+                </li>
+            </ul>
+            
+        </div>
+        <div class="span6 text-panel">
             <?php echo CHtml::encode($comment->comment_text);?>
         </div>
-        <?php if(count($comment->childs) > 0 && $this->allowSubcommenting === true) $this->render('ECommentsWidgetComments', array('comments' => $comment->childs));?>
-        <?php
-            if($this->allowSubcommenting === true && ($this->registeredOnly === false || Yii::app()->user->isGuest === false))
-            {
-                echo CHtml::link(Yii::t('CommentsModule.msg', 'Add comment'), '#', array('rel'=>$comment->comment_id, 'class'=>'add-comment'));
-            }
-        ?>
-    </li>
+    </div>
+</div>
        
 

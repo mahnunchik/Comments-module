@@ -71,12 +71,12 @@ class CommentController extends Controller
 	public function actionDelete($id)
 	{
 		// we only allow deletion via POST request
-                $result = array('deletedID' => $id);
-                if($this->loadModel($id)->setDeleted())
-                    $result['code'] = 'success';
-                else 
-                    $result['code'] = 'fail';
-                echo CJSON::encode($result);
+        $result = array('deletedID' => $id);
+        if($this->loadModel($id)->setDeleted())
+            $result['code'] = 'success';
+        else 
+            $result['code'] = 'fail';
+        echo CJSON::encode($result);
 	}
         
         /**
@@ -86,12 +86,12 @@ class CommentController extends Controller
 	public function actionApprove($id)
 	{
 		// we only allow deletion via POST request
-                $result = array('approvedID' => $id);
-                if($this->loadModel($id)->setApproved())
-                    $result['code'] = 'success';
-                else 
-                    $result['code'] = 'fail';
-                echo CJSON::encode($result);
+        $result = array('approvedID' => $id);
+        if($this->loadModel($id)->setApproved())
+            $result['code'] = 'success';
+        else 
+            $result['code'] = 'fail';
+        echo CJSON::encode($result);
 	}
 
 	/**

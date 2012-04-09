@@ -321,8 +321,7 @@ class Comment extends CActiveRecord {
             $userName .= $this->user->$userConfig['nameProperty'];
             if (isset($userConfig['emailProperty']))
                 $userName .= '(' . $this->user->$userConfig['emailProperty'] . ')';
-        }
-        else {
+        }else {
             $userName = $this->user_name . '(' . $this->user_email . ')';
         }
         return $userName;
