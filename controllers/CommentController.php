@@ -10,7 +10,7 @@
 */
 class CommentController extends Controller
 {
-        public $defaultAction = 'admin';
+    public $defaultAction = 'admin';
     
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -25,7 +25,7 @@ class CommentController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-                        'ajaxOnly + PostComment, Delete, Approve',
+            'ajaxOnly + PostComment, Delete, Approve',
 		);
 	}
         
@@ -51,11 +51,11 @@ class CommentController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('postComment', 'captcha'),
-				'users'=>array('*'),
+				'actions'=>array('postComment', 'delete', 'captcha'),
+				'users'=>array('@'),
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'approve'),
+				'actions'=>array('admin', 'approve'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -147,8 +147,14 @@ class CommentController extends Controller
 	public function loadModel($id)
 	{
 		$model=Comment::model()->findByPk($id);
-		if($model===null)
+		if($model===null){
 			throw new CHttpException(404,'The requested page does not exist.');
-		return $model;
+        }
+        $config = Yii::app()->getModule('comments')->getModelConfig($model->owner_name);
+        
+        if($this->evaluateExpression($config['isSuperuser']) !== false || $model->creator_id == Yii::app()->user->id){
+            return $model;
+        }
+		throw new CHttpException(403,'Forbidden.');
 	}
 }

@@ -23,16 +23,16 @@ class ECommentsFormWidget extends ECommentsBaseWidget
         
 	public function run()
 	{
-            if($this->registeredOnly === false || Yii::app()->user->isGuest === false)
-            {
-                $this->render('ECommentsFormWidget', array(
-                    'newComment' => $this->validatedComment ? $this->validatedComment : $this->createNewComment(),
-                ));
-            }
-            else 
-            {
-                echo '<strong>'.Yii::t('CommentsModule.msg', 'You cannot add a new comment').'</strong>';
-            }
+        if($this->registeredOnly === false || Yii::app()->user->isGuest === false)
+        {
+            $this->render('ECommentsFormWidget', array(
+                'newComment' => $this->validatedComment ? $this->validatedComment : $this->createNewComment(),
+            ));
+        }
+        else 
+        {
+            echo '<strong>'.Yii::t('CommentsModule.msg', 'You cannot add a new comment').'</strong>';
+        }
 	}
 }
 ?>

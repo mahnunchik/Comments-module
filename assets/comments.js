@@ -16,7 +16,6 @@
             var settings = $.extend({}, $.fn.commentsList.defaults, options || {});
             var $this = $(this);
             var id = $this.attr('id');
-            console.log('wi id: ', id, $this);
             $.fn.commentsList.settings[id] = settings;
             $.fn.commentsList.initDialog(id);
             $this
@@ -52,8 +51,6 @@
             .delegate('.post-comment', 'click', function(){
                 var id = $($(this).parents('.comment-widget')[0]).attr("id");
                 $dialog = $("#addCommentDialog-"+id);
-                
-                console.log($dialog);
                 $.fn.commentsList.postComment($dialog);
                 return false;
             });
@@ -76,41 +73,15 @@
         });
             
         $dialog.data('widgetID', id);
-        //$dialog.modal();
-        /*$dialog.dialog({
-            'title':$.fn.commentsList.settings[id]['dialogTitle'],
-            'autoOpen':false,
-            'width':'auto',
-            'height':'auto',
-            'resizable':false,
-            'modal':true,
-            'buttons':[
-                {
-                    text: $.fn.commentsList.settings[id]['postButton'],
-                    click: function(){
-                        $.fn.commentsList.postComment($(this));
-                    }
-                },
-                {
-                    text: $.fn.commentsList.settings[id]['cancelButton'],
-                    click: function(){
-                        $(this).dialog("close");
-                        return false;
-                    }
-                }
-            ]
-        });*/
     }
         
     $.fn.commentsList.postComment = function($dialog){
         var $form = $("form", $dialog);
-        console.log($form);
         $.post(
             $form.attr("action"),
             $form.serialize()
         ).success(function(data){
             data = $.parseJSON(data);
-            console.log(data);
             $dialog.html(data["form"]);
             if(data["code"] == "success")
             {

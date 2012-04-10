@@ -7,12 +7,18 @@
         <div class="span6 admin-panel">
             <?php echo Yii::t('CommentsModule.msg', 'Created:'); ?>
             <?php echo Yii::app()->dateFormatter->formatDateTime($comment->create_time);?>
-            <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'delete'), Yii::app()->urlManager->createUrl(
-                CommentsModule::DELETE_ACTION_ROUTE, array('id'=>$comment->comment_id)
-            ), array('class'=>'delete btn btn-mini btn-danger'));?>
-            <?php echo CHtml::link(Yii::t('CommentsModule.msg', 'edit'), Yii::app()->urlManager->createUrl(
-                $this->postCommentAction, array('id'=>$comment->comment_id)
-            ), array('class'=>'edit-comment btn btn-mini btn-success'));?>
+            <?php
+            if($this->adminMode === true || $comment->creator_id == Yii::app()->user->id){
+                echo CHtml::link(Yii::t('CommentsModule.msg', 'delete'), Yii::app()->urlManager->createUrl(
+                    CommentsModule::DELETE_ACTION_ROUTE, array('id'=>$comment->comment_id)
+                ), array('class'=>'delete btn btn-mini btn-danger'));
+            }?>
+            <?php
+            if($this->adminMode === true || $comment->creator_id == Yii::app()->user->id){
+                echo CHtml::link(Yii::t('CommentsModule.msg', 'edit'), Yii::app()->urlManager->createUrl(
+                    $this->postCommentAction, array('id'=>$comment->comment_id)
+                ), array('class'=>'edit-comment btn btn-mini btn-success'));
+            }?>
         </div>
     </div>
     <hr>

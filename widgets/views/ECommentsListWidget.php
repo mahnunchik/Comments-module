@@ -7,6 +7,7 @@
         'itemView'=>'ECommentsWidgetComments',
         'htmlOptions'=>array('class'=>'comments-list'),
         'cssFile'=>null,
+        'template'=>"{items}\n{summary}\n{pager}",
     )); 
     
     if($this->registeredOnly === false || Yii::app()->user->isGuest === false)
