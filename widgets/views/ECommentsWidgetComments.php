@@ -2,7 +2,9 @@
 <div id="comment-<?php echo $comment->comment_id; ?>" class="comment">
     <div class="row comment-header">
         <div class="span2 name-panel">
-            <?php echo CHtml::link($comment->userName, array("/profile/view","id"=>$comment->creator_id)) ?>
+            <?php echo CHtml::link($comment->userName, array("/profile/view","id"=>$comment->creator_id)).' '.CHtml::link('<i class="icon-envelope"></i>',
+                            array('message/compose', 'id'=>$comment->creator_id),
+                            array('class'=>'btn btn-mini', 'rel'=>"tooltip", 'title'=>"Отправить сообщение")); ?>
         </div>
         <div class="span6 admin-panel">
             <?php echo Yii::t('CommentsModule.msg', 'Created:'); ?>
