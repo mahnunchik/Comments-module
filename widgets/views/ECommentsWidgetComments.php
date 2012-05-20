@@ -30,7 +30,7 @@
             <ul class="thumbnails">
                 <li class="span2">
                     <?php 
-                        $thumbnail_id = $comment->user->profile->thumbnail_id ? $comment->user->profile->thumbnail_id : 1;
+                        $thumbnail_id = $comment->user->profile->thumbnail_id ? $comment->user->profile->thumbnail_id : Profile::DEFAULT_THUMBNAIL_ID;
                         echo CHtml::link(CHtml::image(Yii::app()->image->getURL($thumbnail_id,"span2")) ,
                             array("/profile/view","id"=>$comment->creator_id), array('class'=>'thumbnail')
                         );

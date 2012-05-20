@@ -148,7 +148,7 @@ class CommentController extends Controller
 	{
 		$model=Comment::model()->findByPk($id);
 		if($model===null){
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404,Yii::t('svopi','The requested page does not exist.'));
         }
         $config = Yii::app()->getModule('comments')->getModelConfig($model->owner_name);
         
